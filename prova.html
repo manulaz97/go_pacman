@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Il Nuovo Pacman</title>
+		<META name="author" content="Sofia Girardi e Manuel Lazzarin">
+		<META name="description" content="Il Nuovo Pacman">
+		<META name="keywords" conent="Game,Pac-Man,Fantasmi,Fantasma">
+		<META name="generator" content="Brackets,TextWrangler">
+		<style>
+		#c{ position: absolute; margin-left: 10%; background-color:#000; margin-top:10px;}
+		#e{ position: absolute; margin-left: 10%; background-color:#000; margin-top:115px;}
+		#d{ position: absolute; margin-left: 10%; background-color:#000; margin-top:190px;}
+
+		</style>
+	</head>
+	<body onload="animText(), drawText2(), draw(), prepareCanvas()">
+		<canvas id="c" width="1000" height="100">
+		</canvas>
+		<canvas id="e" width="1000" height="70">
+		</canvas>
+		<canvas id="d" width="1000" height="450" tabindex="1">
+		</canvas>
+	
+	</body>
+    <script type="text/javascript">
+		//variabili testo
+		var textX=70;
+		var textY=70;
+		var dx=-2;
+		var ctx;
+		//fine var testo
+		//var random img
+		var ctx2;		
+		var ran;
+		var immagine;
+		var imgX=30;
+		var imgY=30;
+		//fine var random img
+		// variabili testo 2
+		var ctx3;
+		var textX1=300;
+		var textY1=40;
+		//fine variabili testo 2
+		// variabili tastiera
+		var canvas 	= document.getElementById("c");
+		ctx2 	= canvas.getContext("2d");
+		// fine var tastiera
+		
+		
+		/*
+		 *
+		 *Inizio a scrivere il codice mantenere le variabili e il code separati
+		 *
+		 *
+		 */
+		
+		//seleziono il canvas c e richiedo l'animazione
+		function animText() {
+			var canvas=document.getElementById("c");
+			ctx=canvas.getContext("2d");
+			window.requestAnimationFrame(drawText);
+		}
+		//fine seleziono il canvas c e richiedo l'animazione
+		//disegno testo nel canvas c
+		function drawText(){
+			// cancelliamo frame precedente
+			ctx.clearRect(0,0,1000,500);
+			//disegno il nuovo function
+			ctx.font="60px Verdana";
+			ctx.fillText("GO PACMAN!", textX, textY);
+			ctx.fillStyle="#ff0";
+			//preparo alcuni dati per il prossimo frame
+			textX=textX+dx;
+			if(textX>405||textX<20){
+				dx = -dx;
+			}
+			// Chiamiamo il prossimo frame
+			window.requestAnimationFrame(drawText);
+		}
+		//fine disegno testo nel canvas c
+		
+		//disegno il testo nel canvas e 
+		function drawText2(){
+			var canvas2=document.getElementById("e");
+			ctx3=canvas2.getContext("2d");
+			ctx3.font="20px Verdana";
+			ctx3.fillStyle="#ff0";
+			ctx3.fillText("Clicca sul fantasmino, poi usa le frecce per giocare!", textX1, textY1);
+
+		}
+		//fine disegno il testo nel canvas e	
+
+
+		//disegno i fantasmini a random nel canvas d
+		//creo array con immagini random
+		immagine = new Array()
+		ran = Math.floor(4 * Math.random());
+		immagine[0] = 'fan_ara.png';
+		immagine[1] = 'fan_blu.png';
+		immagine[2] = 'fan_red.png';
+		immagine[3] = 'fan_ros.png';
+		//fine creo array con immagini random
+		
+		//disegno un'immagine a random
+		function draw() {
+			var img = new Image();
+			img.src = immagine[ran];
+			ctx2 =  document.getElementById('d').getContext('2d');
+			img.onload = function(){
+				ctx2.drawImage(img,imgX,imgY,128,128);//default (img,0,0,128,128)
+			}
+		}	
+		//fine 	disegno un'immagine a random
+	/*	
+		//genero x casuale per img 
+		imgX =(Math.random()*850);
+		//genero y casuale per img
+		imgY= (Math.random()*300);
+		if (imgY<20){imgY =(Math.random()*300);}
+	*/
+		//fine disegno i fantasmini a random nel canvas d
+
+
+		function prepareCanvas(){
+			canvas.addEventListener("click",focusOnCanvas,true);
+			canvas.addEventListener("keydown",handleKeyboardDown,true);
+			window.requestAnimationFrame(draw);
+		}
+			
+		function focusOnCanvas(){
+			canvas.focus();
+		}
+		function handleKeyboardDown(evt){
+			var direction;
+    		if(evt.key=="ArrowRight"){direction = 'right';}
+   			if(evt.key=="ArrowLeft"){direction = 'left';}
+    		if(evt.key=="ArrowUp"){direction = 'up';}
+   			if(evt.key=="ArrowDown"){direction = 'down';}
+			move(direction);
+  		}
+		function move(direction){
+			switch(direction){
+				case 'right':
+					imgX = imgX + 30;
+					ctx2.clearRect(0,0,1000,450);
+					ctx2.drawImage(img,imgX,imgY);
+					ctx2.drawImage(img,imgX,imgY);
+					window.requestAnimationFrame(draw);
+					break;
+				case 'left':
+					imgX = imgX - 20;
+					window.requestAnimationFrame(draw);
+					break;
+				case 'up':
+					imgY = imgY + 20;
+					window.requestAnimationFrame(draw);
+					break;
+				case 'down':
+					imgY = imgY - 20;
+					window.requestAnimationFrame(draw);			
+					break;
+				default:
+					break;
+			}
+		}
+	</script>
+</html>
